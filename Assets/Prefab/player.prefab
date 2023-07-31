@@ -164,3 +164,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 8322051159368027333}
+  Balle: {fileID: 4421715399636809557, guid: ed24e13566dea0842a523184d220bb49, type: 3}
+  mouvementSpeed: 10
+  lastball: {fileID: 0}
+  playerTransform: {fileID: 0}
