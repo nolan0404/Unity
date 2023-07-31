@@ -1,37 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerControler : MonoBehaviour
 {
-    public float moveSpeed = 5f;
-    public GameObject bulletPrefab;
-    public Transform firePoint;
-    public float bulletSpeed = 20f;
+    private Vector2 direction;
+    [SerializeField] private Rigidbody rb;
+    [SerializeField] private GameObject Balle;
+    [SerializeField] private float mouvementSpeed = 10;
+    [SerializeField] private Transform playerTransform;
+    private float xRotation;
 
-    void Update()
+
+    public void Move (Vector2 moveTo)
     {
-        // Player1 için hareket kontrolleri
-        float horizontalInput = Input.GetAxis("Horizontal1");
-        float verticalInput = Input.GetAxis("Vertical1");
+        // Définit la vitesse du personnage\\
+        direction = moveTo;
+        rb.velocity = new Vector3(direction.x, 0, direction.y);
+        rb.velocity = new Vector3(direction.x * mouvementSpeed, rb.velocity.y, direction.y * mouvementSpeed);
 
-        Vector3 moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
-        Vector3 moveVelocity = moveDirection * moveSpeed;
-
-        GetComponent<Rigidbody>().velocity = moveVelocity;
-
-        // Player1 için ateþ etme
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Shoot();
-        }
+        //Permet au personnage de courir et de tirer en meme temps\\
+        Vector3 forward = transform.forward;
+        forward.y = 0;
+        rb.velocity = forward * direction.y * mouvementSpeed + transform.right * direction.x * mouvementSpeed + rb.velocity.y * Vector3.up;
     }
 
-    void Shoot()
+    //Instantiate = faire apparaitre un objet\\
+    public void SpawnABalle()
     {
-        // Player1 için mermi oluþturma ve atýþ iþlemleri
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-        Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
-        bulletRigidbody.velocity = firePoint.forward * bulletSpeed;
+        Instantiate(Balle, transform.position + transform.forward * 2f, Quaternion.identity);
     }
+
+    //Permet au personnage de se tourner
 }
